@@ -1,0 +1,140 @@
+01 — HeritageXR Studio
+
+Mở bằng trải nghiệm: một hiện vật không chỉ có tên và niên đại; nó có những câu chuyện để khách chủ động khám phá. Giới thiệu HeritageXR Studio là hướng phát triển nền tảng web, với demo hiện tại về mô hình 3D và audio. Trống trên slide là mô hình minh họa của ứng dụng, không phải bản quét hiện vật.
+
+[Sources]
+- HistPlan.md: PART 1, PART 3
+- frontend/src/InteractiveScene.tsx
+- assets/cover-drum.png: ảnh chụp canvas từ bản demo cục bộ
+[/Sources]
+
+======================================================================
+
+02 — Một hiện vật có nhiều điều để kể.
+
+Các vấn đề này là giả thuyết thiết kế từ kế hoạch, chưa phải kết quả khảo sát khách hoặc bảo tàng. Không trình bày các mốc 15 phút hay 56 phút trong kế hoạch như số liệu đã đo. Chuyển sang giải pháp bằng câu hỏi: một đường dẫn web có thể gắn các lớp nội dung lại với nhau như thế nào?
+
+[Sources]
+- HistPlan.md: PART 1 — The Problem; PART 2 — Generate Once, Serve Millions
+[/Sources]
+
+======================================================================
+
+03 — Một đường dẫn, nhiều lớp khám phá.
+
+Ba hình đều là ảnh chụp trực tiếp từ frontend đang chạy. Luồng hiện tại chọn hiện vật qua hotspot; quét QR và tracking WebAR là định hướng cần tích hợp thêm. Không gọi bản demo hiện tại là hệ thống WebAR tracking đã hoàn thiện.
+
+[Sources]
+- HistPlan.md: PART 2, PART 3
+- frontend/src/App.tsx
+- assets/mobile-object.png; mobile-story.png; mobile-spatial.png: ảnh chụp bản demo
+[/Sources]
+
+======================================================================
+
+04 — Khách luôn có một cách để bắt đầu.
+
+Đọc sơ đồ từ trái sang phải. QR là điểm vào theo kiến trúc đề xuất. Nhánh camera chỉ được mở khi khách đồng ý; nhánh danh mục 3D phục vụ cả người không có camera. Điểm đã kiểm tra trong repo là camera tùy chọn, mô hình 3D và audio không bị chặn khi thiếu camera; chưa kiểm chứng tracking WebAR ngoài thực địa.
+
+[Sources]
+- HistPlan.md: PART 2 — One-Scan Universal Pass; PART 3
+- frontend/src/CameraPassthrough.tsx
+- frontend/audio_ai_engineering/TEST_RESULTS.md
+[/Sources]
+
+======================================================================
+
+05 — Đã có phần để nhìn và nghe.
+
+Ba hiện vật là trống Ngọc Lũ, thạp Đào Thịnh và loại hình dao găm Đông Sơn. Sáu MP3 được tạo bằng KorvaTTS cục bộ, giọng ngoc_huyen; không phải giọng Oanh. ElevenLabs đã có công cụ tích hợp nhưng việc dùng voice library qua API bị giới hạn ở tài khoản hiện tại. Không tuyên bố đã chạy toàn bộ pipeline AI hay đã đo tải người dùng thực tế.
+
+[Sources]
+- frontend/src/exhibitStories.ts
+- frontend/public/narration/*.json
+- frontend/audio_ai_engineering/TEST_RESULTS.md
+- assets/proof-narration.png: ảnh chụp trình phát thực tế
+[/Sources]
+
+======================================================================
+
+06 — Góc nhìn đổi, không gian lên tiếng.
+
+Nguồn minh họa gồm lửa lò, tiếng gõ và dòng nước. AudioListener lấy vị trí, vector nhìn và vector lên từ camera Three.js; PannerNode dùng HRTF và GainNode điều chỉnh độ rõ theo hướng. Thử nghiệm tự động đã xác nhận đảo kênh trái/phải khi quay 180 độ, tắt nguồn và dừng khi rời màn hình. Chưa kiểm tra iOS Safari và cảm biến vật lý. Không gọi các âm tổng hợp này là phục dựng âm thanh lịch sử chính xác.
+
+[Sources]
+- frontend/audio_ai_engineering/spatialAudio.ts
+- frontend/audio_ai_engineering/SpatialAudioExperience.tsx
+- frontend/src/InteractiveStructureScene.tsx
+- frontend/audio_ai_engineering/TEST_RESULTS.md
+- assets/spatial-controls.png: ảnh chụp giao diện thực tế
+[/Sources]
+
+======================================================================
+
+07 — Nội dung đi qua một cổng kiểm duyệt.
+
+Đây là sơ đồ kiến trúc đề xuất, không phải sơ đồ mô tả một backend đã chạy đầy đủ. Ảnh và tư liệu do đơn vị trưng bày cung cấp được dùng để soạn kịch bản và tạo media. Người duyệt kiểm tra nội dung trước xuất bản. Hướng dài hạn là tác vụ tạo nội dung bất đồng bộ và phân phối tài nguyên tĩnh theo phiên bản. Không khẳng định không có nghẽn mạng hay chịu được 5.000 người dùng khi chưa benchmark.
+
+[Sources]
+- HistPlan.md: PART 2 — Curatorial Gate, Generate Once; PART 4; PART 5
+- frontend/audio_ai_engineering/generate-local-narration.py
+- frontend/audio_ai_engineering/generate-narration.mjs
+[/Sources]
+
+======================================================================
+
+08 — Nội dung đáng tin trước khi nhập vai.
+
+Các liên kết sử liệu và thông báo mô hình minh họa có trong frontend. Cổng biên tập người duyệt thuộc kiến trúc mục tiêu, chưa có backend CMS. Camera và cảm biến cần quyền; bản demo có xử lý từ chối quyền. Không tuyên bố loại bỏ hoàn toàn sai lệch lịch sử hoặc rủi ro riêng tư.
+
+[Sources]
+- frontend/src/exhibitInformation.ts
+- frontend/src/exhibitStories.ts
+- frontend/src/CameraPassthrough.tsx
+- frontend/audio_ai_engineering/SpatialAudioExperience.tsx
+- HistPlan.md: PART 2 — Curatorial Gate
+[/Sources]
+
+======================================================================
+
+09 — Giá trị cho điểm đến và khách tham quan.
+
+B2B2C là định hướng của master plan. Giá 30.000 đồng cho ảnh số và 50.000 đồng cho gói in lụa lấy từ kế hoạch, chưa phải giá đã bán hoặc kết quả khảo sát. Không sử dụng tỷ lệ margin 98%/45% hoặc affiliate 20% như số liệu đã kiểm chứng. Cấu trúc phí khởi tạo và duy trì là đề xuất pitching để thảo luận, chưa có báo giá. Luồng thanh toán/POS/photo chưa triển khai trong repo hiện tại.
+
+[Sources]
+- HistPlan.md: PART 1 — B2B2C; PART 3 — Commerce; PART 4
+[/Sources]
+
+======================================================================
+
+10 — Một điểm đến. Ba hiện vật. Một thử nghiệm.
+
+Đây là lịch thử nghiệm do deck đề xuất, không phải cam kết hoặc lịch đã được đối tác chấp thuận. Bắt đầu nhỏ để đánh giá giá trị sử dụng thay vì khẳng định mục tiêu 56 phút đã đạt. Cần định nghĩa mốc bắt đầu/kết thúc phiên, có sự đồng ý phù hợp cho quan sát và không suy diễn chỉ số từ số người truy cập.
+
+[Sources]
+- Đề xuất pilot phục vụ pitching, xây dựng từ phạm vi demo và các giới hạn trong frontend/audio_ai_engineering/TEST_RESULTS.md
+- HistPlan.md: PART 1, PART 3
+[/Sources]
+
+======================================================================
+
+11 — Bước tiếp theo tập trung vào vận hành.
+
+Giữ đúng trạng thái: demo frontend và audio là phần có mã chạy và kiểm tra; kiểm thử sensor đã dùng mô phỏng. Không gộp RAG, tracking, CMS hoặc commerce vào các tính năng đã hoàn thành. Các mốc triển khai tiếp theo cần chia việc và ưu tiên với nhóm, chưa có deadline hoặc ngân sách được xác nhận.
+
+[Sources]
+- frontend/src/App.tsx
+- frontend/audio_ai_engineering/TEST_RESULTS.md
+- HistPlan.md: PART 2, PART 4, PART 5
+[/Sources]
+
+======================================================================
+
+12 — Cùng đưa di sản vào một trải nghiệm có thể đo.
+
+Kết lại bằng đề nghị cụ thể: một đối tác trưng bày và người phụ trách tư liệu cùng tham gia thiết kế pilot. Không đưa số tiền gọi vốn, số người dùng, đối tác, danh sách thành viên hoặc kết quả thị trường khi chưa được cung cấp. Nếu hỏi về demo, chuyển sang ứng dụng ở máy trình bày và mở Âm thanh 360 độ; dùng tai nghe để cảm nhận stereo.
+
+[Sources]
+- Đề nghị hợp tác được xây dựng cho deck từ HistPlan.md và phạm vi demo
+- assets/closing-dagger.png: ảnh chụp mô hình minh họa từ frontend
+[/Sources]

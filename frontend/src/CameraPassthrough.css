@@ -107,7 +107,18 @@
   text-align: right;
 }
 
+.camera-passthrough-control.is-compact {
+  top: 6px;
+  right: 110px;
+  max-width: 170px;
+}
+
+.camera-passthrough-control.is-compact .camera-toggle-button {
+  min-height: 44px;
+}
+
 @media (max-width: 760px) {
+  .camera-passthrough-control.is-compact { top: 4px; right: 88px; max-width: 145px; }
   .camera-passthrough-control {
     top: 66px;
     right: 10px;

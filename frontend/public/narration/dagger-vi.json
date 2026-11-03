@@ -1,0 +1,12 @@
+{
+  "provider": "local",
+  "model": "KorvaTTS-0.1.3",
+  "voice": "ngoc_huyen",
+  "language": "vi",
+  "steps": 32,
+  "speed": 0.96,
+  "seed": 42,
+  "fingerprint": "0c89dd42418cf69ee9fba6ca4f49aed537b887e785764082855baa20c67de2e4",
+  "duration_seconds": 21.77,
+  "sample_rate": 44100
+}

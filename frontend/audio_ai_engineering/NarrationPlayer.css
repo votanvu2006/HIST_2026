@@ -1,0 +1,33 @@
+.narration-player {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #5b513b;
+  border-radius: 12px;
+  background: #181a16;
+}
+
+.narration-player-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.narration-player h3 { margin: 4px 0 0; color: #f0e5cd; font-size: 18px; }
+.narration-player p { margin: 0; color: #e2ddcf; line-height: 1.6; font-size: 14px; }
+.narration-player audio { width: 100%; }
+.narration-languages { display: flex; gap: 8px; }
+.narration-languages button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #89774f;
+  border-radius: 7px;
+  color: #f0e5cd;
+  background: transparent;
+  cursor: pointer;
+}
+.narration-languages button[aria-pressed="true"] { background: #d5b86f; color: #171a15; }
+.narration-languages button:focus-visible { outline: 3px solid #f5d988; outline-offset: 2px; }
+.narration-player .narration-unavailable { color: #e5cc8e; }

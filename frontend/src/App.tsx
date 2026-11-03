@@ -7,6 +7,8 @@ import { CraftingVideo } from "./CraftingVideo";
 import { QuizPanel, readDemoPoints } from "./QuizPanel";
 import { Chatbot, type ExhibitChatContext } from "./Chatbot";
 import { CameraPassthrough } from "./CameraPassthrough";
+import { NarrationPlayer } from "../audio_ai_engineering/NarrationPlayer";
+import { SpatialAudioExperience } from "../audio_ai_engineering/SpatialAudioExperience";
 import "./App.css";
 import "./HeritageExperience.css";
 
@@ -15,10 +17,11 @@ type ExperienceScreen =
   | "object"
   | "information"
   | "story"
+  | "soundscape"
   | "crafting"
   | "quiz";
 
-type ObjectSection = "information" | "story" | "crafting" | "quiz";
+type ObjectSection = "information" | "story" | "soundscape" | "crafting" | "quiz";
 
 const exhibits: {
   id: ExhibitId;
@@ -53,6 +56,7 @@ const objectSections: {
 }[] = [
   { id: "information", icon: "i", label: "Thông tin" },
   { id: "story", icon: "▶", label: "Câu chuyện" },
+  { id: "soundscape", icon: "◉", label: "Âm thanh 360°" },
   { id: "crafting", icon: "⚒", label: "Chế tác" },
   { id: "quiz", icon: "✦", label: "Đố vui" },
 ];
@@ -60,6 +64,7 @@ const objectSections: {
 const contentFlow: ObjectSection[] = [
   "information",
   "story",
+  "soundscape",
   "crafting",
   "quiz",
 ];
@@ -150,12 +155,13 @@ function App() {
     object: "Khám phá hiện vật",
     information: "Thông tin hiện vật",
     story: "Câu chuyện hiện vật",
+    soundscape: "Âm thanh môi trường 360°",
     crafting: "Quá trình chế tác",
     quiz: "Đố vui có thưởng",
   };
 
   return (
-    <CameraPassthrough>
+    <CameraPassthrough compactControls={screen === "soundscape"}>
       <main className="app heritage-experience spatial-app">
         <header className="app-header heritage-app-header spatial-header">
           <div className="heritage-brand">
@@ -359,6 +365,12 @@ function App() {
                       </p>
                     </div>
 
+                    <NarrationPlayer key={selectedExhibit.id} exhibitId={selectedExhibit.id} />
+
+                    <button className="spatial-next-button" type="button" onClick={() => openObjectSection("soundscape")}>
+                      Trải nghiệm âm thanh 360°
+                    </button>
+
                     <div className="spatial-story-video">
                       {!storyVideoUnavailable ? (
                         <video
@@ -402,6 +414,10 @@ function App() {
                       ))}
                     </div>
                   </article>
+                )}
+
+                {screen === "soundscape" && (
+                  <SpatialAudioExperience key={selectedExhibit.id} exhibitId={selectedExhibit.id} />
                 )}
 
                 {screen === "crafting" && (

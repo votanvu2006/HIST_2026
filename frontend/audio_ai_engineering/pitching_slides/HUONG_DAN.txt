@@ -1,0 +1,37 @@
+HERITAGEXR STUDIO — BỘ PITCHING 16:9
+
+1. TRÌNH CHIẾU
+Mở index.html bằng Chrome hoặc Edge. Không cần chạy npm hoặc có Internet.
+- Mũi tên trái/phải, Page Up/Page Down hoặc Space: chuyển slide.
+- Home/End: về đầu/cuối.
+- N hoặc nút Ghi chú: mở lời dẫn và nguồn của slide hiện tại.
+- Toàn màn hình: phóng lớn trình chiếu.
+- In / PDF: in tất cả slide, giữ nền màu và khổ ngang 16:9.
+
+2. BẢN PDF
+HeritageXR_Pitching_16x9.pdf có 12 trang, tỉ lệ 16:9.
+Mở bằng trình đọc PDF và dùng chế độ toàn màn hình để thuyết trình.
+
+3. CHỈNH SỬA
+- slides.js: nội dung, sơ đồ, lời dẫn và nguồn từng slide.
+- slides.css: màu sắc, chữ, bố cục và kích thước.
+- assets/: ảnh chụp thật từ bản demo; giữ thư mục này cạnh index.html.
+- SPEAKER_NOTES.txt: toàn bộ lời dẫn và nguồn để nhóm chuẩn bị trình bày.
+- Workflow_HeThong.svg, Workflow_Khach.svg: sơ đồ dạng vector để tái sử dụng.
+
+Bản có thể chỉnh sửa trong gói này là HTML/CSS/JavaScript; PDF là bản xuất tĩnh.
+Nếu sửa HTML/CSS/JS, xuất lại PDF bằng nút In / PDF trong trình duyệt.
+
+4. HỆ THỐNG THỊ GIÁC
+Canvas: 1600 × 900; lề trái/phải 84 px; số trang và chú thích cố định.
+Màu chính: than xanh #101713, vàng đồng #DCB779, giấy ngà #F3EFE4.
+Tiêu đề: Georgia; thân bài: Segoe UI/Arial. Dùng font có sẵn trên máy.
+Ảnh mô hình là hình minh họa của bản demo, không phải bản quét hiện vật thật.
+
+5. PHẠM VI NỘI DUNG
+Nguồn chính: HistPlan.md và mã nguồn frontend trong cùng repository.
+Demo hiện có: mô hình 3D minh họa, sáu MP3 Việt/Anh và âm thanh 360°.
+QR/tracking, CMS, RAG, hàng đợi media, CDN và thương mại là kế hoạch phát triển.
+Giá 30k/50k là dự kiến; lịch pilot 4 tuần là đề xuất, chưa có đối tác xác nhận.
+Không dùng các mục tiêu thời gian, biên lợi nhuận hoặc tải người dùng như số liệu đã đo.
+Lời dẫn chi tiết có ghi nguồn cho từng slide; không chứa API key hay thông tin .env.

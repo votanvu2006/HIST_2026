@@ -6,6 +6,7 @@ import {
   type ExhibitId,
 } from "./InteractiveScene";
 import "./InteractiveStructureScene.css";
+import type { ListenerPose } from "../audio_ai_engineering/spatialAudio";
 
 type StructurePart = {
   id: string;
@@ -25,6 +26,8 @@ type StructurePart = {
 
 type StructureSceneProps = {
   exhibitId: ExhibitId;
+  viewAngles?: { yaw: number; pitch: number } | null;
+  onViewPose?: (pose: ListenerPose) => void;
 };
 
 const structureParts: Record<ExhibitId, StructurePart[]> = {
@@ -130,9 +133,18 @@ const structureParts: Record<ExhibitId, StructurePart[]> = {
 
 export function InteractiveStructureScene({
   exhibitId,
+  viewAngles = null,
+  onViewPose,
 }: StructureSceneProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const connectorSvgRef = useRef<SVGSVGElement>(null);
+  const viewAnglesRef = useRef(viewAngles);
+  const onViewPoseRef = useRef(onViewPose);
+
+  useEffect(() => {
+    viewAnglesRef.current = viewAngles;
+    onViewPoseRef.current = onViewPose;
+  }, [viewAngles, onViewPose]);
 
   const hotspotRefs = useRef(new Map<string, HTMLButtonElement>());
   const lineRefs = useRef(new Map<string, SVGLineElement>());
@@ -231,6 +243,14 @@ export function InteractiveStructureScene({
 
     camera.position.set(radius * 1.35, radius * 0.9, radius * 3.1);
     controls.update();
+    const initialPosition = camera.position.clone();
+    const initialRotation = camera.quaternion.clone();
+    const yawRotation = new THREE.Quaternion();
+    const pitchRotation = new THREE.Quaternion();
+    const worldUp = new THREE.Vector3(0, 1, 0);
+    const worldRight = new THREE.Vector3(1, 0, 0);
+    const forward = new THREE.Vector3();
+    const listenerUp = new THREE.Vector3();
 
     const resize = () => {
       const width = viewport.clientWidth || 1;
@@ -261,7 +281,16 @@ export function InteractiveStructureScene({
 
       const delta = clock.getDelta();
 
-      controls.update();
+      const view = viewAnglesRef.current;
+      controls.enabled = !view;
+      if (view) {
+        camera.position.copy(initialPosition);
+        yawRotation.setFromAxisAngle(worldUp, THREE.MathUtils.degToRad(-view.yaw));
+        pitchRotation.setFromAxisAngle(worldRight, THREE.MathUtils.degToRad(view.pitch));
+        camera.quaternion.copy(yawRotation).multiply(initialRotation).multiply(pitchRotation);
+      } else {
+        controls.update();
+      }
 
       cutawayProgress = THREE.MathUtils.damp(
         cutawayProgress,
@@ -278,6 +307,15 @@ export function InteractiveStructureScene({
 
       scene.updateMatrixWorld(true);
       camera.updateMatrixWorld();
+      if (onViewPoseRef.current) {
+        camera.getWorldDirection(forward);
+        listenerUp.set(0, 1, 0).applyQuaternion(camera.quaternion);
+        onViewPoseRef.current({
+          position: [camera.position.x / radius, camera.position.y / radius, camera.position.z / radius],
+          forward: [forward.x, forward.y, forward.z],
+          up: [listenerUp.x, listenerUp.y, listenerUp.z],
+        });
+      }
 
       const viewportRect = viewport.getBoundingClientRect();
       const width = viewport.clientWidth;

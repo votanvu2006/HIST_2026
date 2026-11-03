@@ -9,9 +9,10 @@ import "./CameraPassthrough.css";
 
 type CameraPassthroughProps = {
   children: ReactNode;
+  compactControls?: boolean;
 };
 
-export function CameraPassthrough({ children }: CameraPassthroughProps) {
+export function CameraPassthrough({ children, compactControls = false }: CameraPassthroughProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
@@ -105,7 +106,7 @@ export function CameraPassthrough({ children }: CameraPassthroughProps) {
       <div className="camera-passthrough-shade" aria-hidden="true" />
       <div className="camera-passthrough-content">{children}</div>
 
-      <div className="camera-passthrough-control">
+      <div className={`camera-passthrough-control ${compactControls ? "is-compact" : ""}`}>
         <button
           className={`camera-toggle-button ${
             isCameraOn ? "is-active" : ""
@@ -118,12 +119,12 @@ export function CameraPassthrough({ children }: CameraPassthroughProps) {
           {isCameraOn ? "Tắt camera" : "Bật camera thật"}
         </button>
 
-        <span className="camera-passthrough-caption" aria-live="polite">
+        {(!compactControls || cameraMessage) && <span className="camera-passthrough-caption" aria-live="polite">
           {cameraMessage ||
             (isCameraOn
               ? "Cảnh thật đang hiển thị · xoay điện thoại để lia nhìn"
               : "Bật camera để nhìn thấy không gian xung quanh")}
-        </span>
+        </span>}
       </div>
     </div>
   );

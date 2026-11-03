@@ -1,0 +1,26 @@
+.spatial-audio-experience { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; }
+.spatial-audio-scene { min-width: 0; overflow: hidden; border: 1px solid #5b513b; border-radius: 12px; }
+.spatial-audio-controls { display: grid; align-content: start; gap: 16px; min-width: 0; padding: 16px; border: 1px solid #5b513b; border-radius: 12px; background: #181a16; color: #eee5d0; }
+.spatial-audio-controls h2 { margin: 6px 0 0; font-size: 20px; color: #f0e5cd; }
+.spatial-audio-controls p { margin: 0; font-size: 14px; line-height: 1.6; }
+.spatial-audio-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.spatial-audio-controls button { min-height: 44px; padding: 10px 12px; border: 1px solid #a18a52; border-radius: 8px; background: #28251d; color: #f0e5cd; font: inherit; font-size: 14px; cursor: pointer; }
+.spatial-audio-controls button[aria-pressed="true"] { background: #d5b86f; color: #171a15; }
+.spatial-audio-controls button:disabled { opacity: 0.6; cursor: wait; }
+.spatial-audio-controls :focus-visible { outline: 3px solid #f5d988; outline-offset: 3px; }
+.spatial-audio-range { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 14px; }
+.spatial-audio-range input { grid-column: 1 / -1; width: 100%; min-height: 44px; margin: 0; accent-color: #d5b86f; }
+.spatial-audio-range output { color: #efd087; font-variant-numeric: tabular-nums; }
+.spatial-audio-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.spatial-audio-sources { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 8px; border: 1px solid #786946; border-radius: 8px; font-size: 14px; }
+.spatial-audio-sources label { display: flex; min-height: 44px; align-items: center; gap: 8px; padding: 0 8px; cursor: pointer; }
+.spatial-audio-sources input { width: 18px; height: 18px; accent-color: #d5b86f; }
+.spatial-audio-controls .spatial-audio-note { color: #d6c393; font-size: 13px; }
+.spatial-audio-map { width: 100%; height: 210px; border-radius: 8px; background: #101613; }
+.spatial-audio-narration { grid-column: 1 / -1; }
+.spatial-audio-controls [role="status"] { min-height: 1.6em; color: #f0d18a; }
+@media (max-width: 760px) {
+  .spatial-audio-experience { grid-template-columns: minmax(0, 1fr); }
+  .spatial-audio-scene .structure-scene-viewport { min-height: 320px; height: 42vh; }
+  .spatial-audio-controls { padding: 12px; }
+}
