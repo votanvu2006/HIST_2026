@@ -23,8 +23,66 @@ def _has(text, phrases):
     return any(phrase in text for phrase in phrases)
 
 
+def _question_asks_about_a_different_subject(question: str, artifact: str, plan: QuestionPlan):
+    """Keep a measurement about another named thing from matching the exhibit's measurement."""
+    text = normalize(question)
+    intent = plan.intent
+    if intent not in {"height", "weight", "face_diameter", "mouth_diameter", "lid_diameter", "base_diameter", "dimensions"}:
+        if _has(text, ("nang bao nhieu", "nang bn", "trong luong", "khoi luong", "can nang")):
+            intent = "weight"
+        elif _has(text, ("cao bao nhieu", "cao bn", "cao may", "chieu cao")):
+            intent = "height"
+        else:
+            return None
+    if plan.intent in {"face_diameter", "mouth_diameter", "lid_diameter", "base_diameter"}:
+        return None
+    measurements = (
+        "cao bao nhieu", "cao bn", "cao may", "chieu cao", "nang bao nhieu",
+        "nang bn", "trong luong", "khoi luong", "can nang", "duong kinh",
+        "rong bao nhieu", "kich thuoc", "dai bao nhieu", "dai may",
+    )
+    positions = [text.find(phrase) for phrase in measurements if text.find(phrase) >= 0]
+    if not positions:
+        return None
+
+    start = min(positions)
+    marker = next(phrase for phrase in measurements if text.find(phrase) == start)
+    subject = text[:start].strip()
+    if not subject:
+        suffix = text[start + len(marker):].strip()
+        suffix = re.sub(r"\b(?:bao nhieu|bn|cm|la|cua|con|ve|cua con)\b", " ", suffix)
+        suffix = " ".join(suffix.split())
+        subject = suffix
+    subject = re.sub(r"^(?:(?:cho minh hoi|cho hoi|minh hoi|vay|the|con)\s+)+", "", subject).strip()
+    subject = re.sub(r"\b(?:nay|kia|do|ay|thi|vay|nhe|khong|cua|bao nhieu|bn|cm|la)\b", "", subject).strip()
+    if not subject or subject in {"cai nay", "cai", "hien vat nay", "co vat nay", "hien vat", "co vat", "no", "day", "con"}:
+        return None
+
+    parts = ("nap", "mat", "chan", "day", "mieng", "than", "tang", "chuoi", "luoi")
+    names = {
+        "drum": ("trong dong ngoc lu", "trong ngoc lu", "trong dong", "cai trong", "trong nay", "trong"),
+        "jar": ("thap dong dao thinh", "thap dao thinh", "thap dong", "cai thap", "thap nay", "thap"),
+        "dagger": ("dao gam dong dong son", "dao gam dong", "dao gam", "cai dao", "dao nay", "dao"),
+    }
+    matching_artifact = any(name in subject for name in names[artifact])
+    if matching_artifact and any(re.search(rf"\b{part}\b", subject) for part in parts):
+        return subject, intent, "part"
+    if matching_artifact:
+        return None
+
+    # A noun supplied before or after the measurement must match the selected
+    # artifact; do not substitute that artifact when the subject differs.
+    return subject, intent, "other"
+
+
 def plan_question(question: str, history=(), _split=True) -> QuestionPlan:
     text = normalize(question)
+    if _has(text, (
+        "thong tin co ban", "gioi thieu co ban", "thong tin chung", "tong quan",
+        "gioi thieu so qua", "gioi thieu ve", "thong tin ve", "noi qua ve",
+        "noi cho minh biet ve", "cho biet ve hien vat", "dac diem co ban",
+    )):
+        return QuestionPlan("overview", "artifact", "summarize")
     motif = _has(text,("hoa van", "hoa tiet", "trang tri", "hinh tuong", "nhung hinh", "hinh tren nap", "hinh tren mat", "hinh ve", "hinh khac", "mat troi", "ngoi sao", "chim", "thuyen", "tuong doi", "doi nam nu", "tuong tren nap", "tuong nam nu", "can tuong", "bieu tuong", "phon thuc", "may tia", "bao nhieu tia")) or bool(re.search(r"\b\d+ tia\b",text))
     topic = "motif" if motif else "artifact"
     # Resolve an omitted subject, not an omitted question: explicit material/use/etc.
@@ -53,7 +111,7 @@ def plan_question(question: str, history=(), _split=True) -> QuestionPlan:
         if len(requests)>1:
             return QuestionPlan(None,topic,"multiple",True,requests,all(p.intent for p in subplans))
     material = bool(re.search(r"\b(?:lam tu gi|lam bang gi|chat lieu|vat lieu|nguyen lieu|bang dong|bang sat|bang thep|bang vang)\b",text))
-    use = _has(text,("cong dung", "dung lam gi", "dung de lam gi", "su dung de", "de lam gi"))
+    use = _has(text,("cong dung", "tac dung", "chuc nang", "xai lam gi", "dung vao viec gi", "dung lam gi", "dung de lam gi", "su dung de", "de lam gi"))
     measurement = bool(re.search(r"\b(?:chieu cao|cao bao nhieu|cao bn|cao may|duong kinh|kich thuoc|rong bao nhieu|nang bao nhieu|trong luong|khoi luong)\b",text))
     age = _has(text,("nien dai", "co tu bao gio", "lam tu bao gio", "lam tu khi nao", "lam tu nam nao", "duc nam nao", "thuoc thoi", "lam khi nao", "lam bao gio"))
     # Several independent requests must not be reduced to whichever keyword matched first.
@@ -124,6 +182,8 @@ def plan_question(question: str, history=(), _split=True) -> QuestionPlan:
         if _has(text,("bao vat", "quan trong", "noi tieng", "gia tri")):
             return QuestionPlan("significance",operation="interpret")
         return QuestionPlan(None,topic,"explain")
+    if _has(text,("ngoai dong", "con kim loai", "chua kim loai", "chua vat lieu", "nguyen chat", "dong nguyen", "chua gi khac", "thanh phan hop kim")):
+        return QuestionPlan("composition")
     if material:
         if _has(text,("ty le", "phan tram", "nguyen chat", "hop kim", "thanh phan", "quang", "mo nao", "lay o dau", "chuoi", "can dao")):
             return QuestionPlan("composition")
@@ -180,6 +240,25 @@ def direct_intent(question: str):
     return plan_question(question).intent
 
 
+def reviewed_fallback_allowed(question: str, artifact: str) -> bool:
+    """An outage must not turn arbitrary named subjects into exhibit lookups.
+
+    This deliberately narrow fallback is not the conversation interpreter. The
+    model handles natural follow-ups with full dialogue when it is available.
+    """
+    text = normalize(question)
+    names = {"drum": ("ngoc lu", "trong dong", "cai trong"),
+             "jar": ("dao thinh", "thap"), "dagger": ("dao gam", "cai dao", "dao nay")}
+    if any(re.search(rf"\b{re.escape(name)}\b", text) for name in names[artifact]):
+        return True
+    if _has(text, ("cai nay", "hien vat", "co vat", "ngoai dong", "nguyen chat")):
+        return True
+    return bool(re.fullmatch(
+        r"(?:con |vay |the |no )?(?:chat lieu|nien dai|kich thuoc|chieu cao|trong luong|"
+        r"khoi luong|nang bao nhieu|cao bao nhieu|lam bang gi|lam tu gi|ma kiem ke)"
+        r"(?: la gi| bao nhieu| thi sao| vay| nhe)?", text))
+
+
 def validate_answers(corpus):
     for artifact,book in ANSWERS.items():
         for key,item in book.items():
@@ -196,6 +275,19 @@ def known_answer(question: str, artifact: str, history=()):
     if re.fullmatch(r"(?:cam on(?: ban)?|thanks|thank you|ok|oke|hay qua|tuyet voi|xin chao|chao ban)[ !.]*",text):
         return "answered", "Mình luôn sẵn lòng! Bạn muốn khám phá thêm điều gì về hiện vật này?", []
     plan=plan_question(question,history)
+    different_subject=_question_asks_about_a_different_subject(question,artifact,plan)
+    if different_subject:
+        _,measurement_intent,subject_kind=different_subject
+        if subject_kind=="other":
+            return "out_of_scope", "Mình chỉ trả lời câu hỏi về ba hiện vật đang trưng bày. Câu này đang hỏi về một đối tượng khác nên mình không lấy số đo của hiện vật để trả lời nhé.", []
+        measurement=ANSWERS[artifact].get(measurement_intent)
+        if measurement:
+            label="chiều cao" if measurement_intent=="height" else "cân nặng" if measurement_intent=="weight" else "kích thước"
+            return "insufficient_evidence", f"Hồ sơ chưa ghi riêng {label} của phần này; số đo mình có là của toàn bộ hiện vật.", []
+        return "insufficient_evidence", "Mình chưa có số đo của đối tượng bạn hỏi trong hồ sơ hiện vật này.", []
+    if plan.intent=="overview" and "overview" in ANSWERS[artifact]:
+        item=ANSWERS[artifact]["overview"]
+        return item.get("status","answered"),item["text"],list(item["sources"])
     if plan.multiple and plan.complete and plan.requests:
         labels={"weight":"khối lượng","height":"chiều cao","inventory":"số đăng ký","period":"niên đại","creator":"người chế tác","location":"nơi lưu giữ"}
         records=[]

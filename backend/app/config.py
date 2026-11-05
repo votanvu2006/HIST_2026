@@ -13,6 +13,7 @@ SERVICE_VERSION = (BACKEND / "service-version.txt").read_text(encoding="utf-8").
 class Settings:
     api_key: str = field(default="", repr=False)
     model: str = "gemini-3.5-flash-lite"
+    fallback_model: str = "gemini-3.1-flash-lite"
     embedding_model: str = "gemini-embedding-001"
     transcription_model: str = "gemini-3.5-flash-lite"
     admin_token: str = field(default="", repr=False)
@@ -37,6 +38,7 @@ class Settings:
         return cls(
             api_key=get("GEMINI_API_KEY"),
             model=get("GEMINI_MODEL", cls.model),
+            fallback_model=get("GEMINI_FALLBACK_MODEL", cls.fallback_model),
             embedding_model=get("GEMINI_EMBEDDING_MODEL", cls.embedding_model),
             transcription_model=get(
                 "GEMINI_TRANSCRIPTION_MODEL",

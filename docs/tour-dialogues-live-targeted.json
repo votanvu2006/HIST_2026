@@ -1,0 +1,48 @@
+{
+  "service_version": "2026.11.05-dialogue.5",
+  "passed": 2,
+  "total": 2,
+  "new_session_every_turn": true,
+  "results": [
+    {
+      "scenario": "unrelated-animal-measurement",
+      "question": "Voi cao bao nhiêu?",
+      "rubric": "Do not answer an elephant's height with the selected drum's measurement.",
+      "passed": true,
+      "real_generation": false,
+      "valid_scope_refusal": true,
+      "elapsed_ms": 16,
+      "response": {
+        "artifact_id": "drum",
+        "status": "out_of_scope",
+        "answer": "Mình chỉ trả lời câu hỏi về ba hiện vật đang trưng bày. Câu này đang hỏi về một đối tượng khác nên mình không lấy số đo của hiện vật để trả lời nhé.",
+        "citations": [],
+        "elapsed_ms": 0,
+        "usage": {},
+        "corpus_version": "401ea7bfc0eb8dc9"
+      }
+    },
+    {
+      "scenario": "unrelated-animal-topic",
+      "question": "Voi sống ở đâu?",
+      "rubric": "Do not switch to general elephant facts while a drum is selected.",
+      "passed": true,
+      "real_generation": true,
+      "valid_scope_refusal": true,
+      "elapsed_ms": 10281,
+      "response": {
+        "artifact_id": "drum",
+        "status": "out_of_scope",
+        "answer": "Mình hướng dẫn về Trống Ngọc Lũ, Thạp Đào Thịnh và dao găm Đông Sơn trong phần trưng bày này. Câu vừa rồi nằm ngoài phạm vi đó; mình cùng quay lại hiện vật bạn đang xem nhé.",
+        "citations": [],
+        "elapsed_ms": 10254,
+        "usage": {
+          "input_tokens": 3622,
+          "output_tokens": 62,
+          "total_tokens": 3684
+        },
+        "corpus_version": "401ea7bfc0eb8dc9"
+      }
+    }
+  ]
+}

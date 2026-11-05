@@ -38,6 +38,59 @@ def test_open_or_multiple_questions_are_not_swallowed_by_a_keyword(question):
     assert known_answer(question,"jar") is None
 
 
+@pytest.mark.parametrize("artifact,question,required",[
+    ("drum", "thông tin cơ bản của cổ vật này", "Trống Ngọc Lũ"),
+    ("drum", "giới thiệu sơ qua về trống", "Đông Sơn"),
+    ("jar", "cho mình biết thông tin chung về cái này", "Thạp Đào Thịnh"),
+    ("jar", "đặc điểm cơ bản của thạp là gì", "lương thực"),
+    ("dagger", "giới thiệu sơ qua về dao găm này", "mô hình minh họa"),
+])
+def test_general_information_requests_receive_a_cited_overview(artifact,question,required):
+    result=known_answer(question,artifact)
+    assert result is not None
+    status,answer,sources=result
+    assert status=="answered"
+    assert required.lower() in answer.lower()
+    assert sources and len(sources)<=3
+
+
+@pytest.mark.parametrize("question",[
+    "con hươu cao cổ cao bao nhiêu",
+    "hươu cao cổ cao bn cm",
+    "con hươu cao cổ nặng bao nhiêu",
+])
+def test_named_animal_measurement_does_not_return_selected_drum_measurement(question):
+    result=known_answer(question,"drum")
+    assert result is not None
+    status,answer,sources=result
+    assert status=="out_of_scope"
+    assert "đối tượng khác" in answer.lower()
+    assert "63 cm" not in answer
+    assert not sources
+
+
+@pytest.mark.parametrize("question",[
+    "phở cao bao nhiêu",
+    "trẻ em nặng bao nhiêu",
+    "cá voi cao bao nhiêu",
+])
+def test_unrelated_question_cannot_inherit_the_selected_artifact(question):
+    result=known_answer(question,"drum")
+    assert result and result[0]=="out_of_scope"
+    assert not result[2]
+
+
+@pytest.mark.parametrize("artifact,question",[
+    ("jar","nắp thạp cao bao nhiêu"),
+    ("drum","mặt trống cao bao nhiêu"),
+])
+def test_part_dimensions_are_not_replaced_with_whole_artifact_height(artifact,question):
+    result=known_answer(question,artifact)
+    assert result and result[0]=="insufficient_evidence"
+    assert "phần này" in result[1]
+    assert "98 cm" not in result[1] and "63 cm" not in result[1]
+
+
 def test_followup_keeps_motif_subject_but_changes_requested_operation():
     history=[{"question":"Hoa văn có gì đặc biệt?","answer":"Nắp có hình mặt trời...","topic":"motif"}]
     plan=plan_question("Cảm hứng từ đâu?",history)

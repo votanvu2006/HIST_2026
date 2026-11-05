@@ -1,8 +1,9 @@
 {
   "drum": {
+    "overview":{"text":"Trống Ngọc Lũ là trống đồng thuộc văn hóa Đông Sơn, có niên đại khoảng 2.000–2.500 năm. Trống cao 63 cm và mặt rộng 79,3 cm. Số đo chân có hai mức khác nhau trong hồ sơ nên mình chưa chốt một số.","sources":["NL-01-period","NL-01-size","NL-01-size-2019"]},
     "identity":{"text":"Đây là Trống đồng Ngọc Lũ, một hiện vật tiêu biểu của văn hóa Đông Sơn. Bạn đang xem mô hình 3D minh họa cho hiện vật ấy.","sources":["NL-01-period"]},
     "material":{"text":"Trống Ngọc Lũ được làm bằng đồng nhé.","sources":["NL-01-period"]},
-    "composition":{"status":"insufficient_evidence","text":"Hồ sơ mình có ghi chất liệu đồng, nhưng chưa có bảng phân tích thành phần hợp kim riêng của trống Ngọc Lũ. Vì vậy mình chưa thể chốt tỷ lệ đồng, thiếc hay chì.","sources":["NL-01-period"]},
+    "composition":{"status":"insufficient_evidence","text":"Đồ đồng Đông Sơn thường dùng hợp kim có đồng, thiếc và chì. Nhưng với riêng trống Ngọc Lũ, mình chưa có kết quả phân tích để khẳng định các kim loại khác và tỷ lệ cụ thể.","sources":["NL-01-period","NL-01-alloy-background"]},
     "period":{"text":"Trống Ngọc Lũ thuộc văn hóa Đông Sơn, được hồ sơ năm 2017 định niên đại khoảng 2.000–2.500 năm trước. Đây là khoảng niên đại khảo cổ, không phải một năm đúc đã biết chính xác.","sources":["NL-01-period"]},
     "height":{"text":"Trống Ngọc Lũ cao 63 cm.","sources":["NL-01-size"]},
     "face_diameter":{"text":"Mặt trống Ngọc Lũ có đường kính 79,3 cm.","sources":["NL-01-size"],"values":[79.3]},
@@ -36,9 +37,10 @@
     "location":{"text":"Trống Ngọc Lũ thuộc bộ sưu tập Bảo tàng Lịch sử Quốc gia ở Hà Nội. Mình chưa xác nhận vị trí phòng trưng bày cụ thể tại thời điểm bạn đến.","sources":["NL-01-collection"]}
   },
   "jar": {
+    "overview":{"text":"Thạp Đào Thịnh là đồ đồng thuộc văn hóa Đông Sơn, niên đại khoảng 2.500–2.000 năm. Thạp được dùng để chứa lương thực hoặc hạt giống. Các tượng đôi trên nắp được nhà nghiên cứu liên hệ với tín ngưỡng sinh sôi.","sources":["DT-01-period","DT-01-use","DT-01-symbolism"]},
     "identity":{"text":"Đây là Thạp đồng Đào Thịnh, một hiện vật thuộc văn hóa Đông Sơn. Bạn đang xem mô hình 3D minh họa cho chiếc thạp này.","sources":["DT-01-period"]},
     "material":{"text":"Thạp Đào Thịnh được làm bằng đồng nhé.","sources":["DT-01-period"]},
-    "composition":{"status":"insufficient_evidence","text":"Mình có thông tin chất liệu là đồng, nhưng chưa có kết quả phân tích hợp kim riêng của chiếc thạp để chốt tỷ lệ các kim loại. Màu vàng của mô hình 3D cũng không phải bằng chứng cho thành phần nguyên bản.","sources":["DT-01-period"]},
+    "composition":{"status":"insufficient_evidence","text":"Đồ đồng Đông Sơn thường dùng hợp kim có đồng, thiếc và chì. Riêng chiếc thạp này, mình chưa có kết quả phân tích để chốt thành phần và tỷ lệ từng kim loại; màu vàng của mô hình cũng không xác định được điều đó.","sources":["DT-01-period","DT-01-alloy-background"]},
     "period":{"text":"Thạp Đào Thịnh thuộc văn hóa Đông Sơn, được hồ sơ định niên đại khoảng 2.500–2.000 năm trước. Chưa có một ngày hay năm đúc chính xác.","sources":["DT-01-period"]},
     "height":{"text":"Chiều cao thạp đang có số liệu không thống nhất: bài năm 2013 ghi 98 cm, nghiên cứu năm 2019 ghi 87 cm, còn danh mục năm 2023 ghi 90 cm. Các nguồn chưa giải thích chênh lệch, nên mình chưa thể chốt một số duy nhất hay đoán rằng khác nhau do tính cả nắp.","sources":["DT-01-size","DT-01-size-2019","DT-01-size-2023"]},
     "height_conflict_reason":{"status":"insufficient_evidence","text":"Mình chưa tìm thấy giải thích chính thức cho việc các hồ sơ ghi chiều cao khác nhau. Vì vậy chưa thể nói chắc là do đo có nắp/không nắp, do phục dựng hay do sai số. Điều có thể xác nhận lúc này là số liệu giữa các tài liệu chưa thống nhất.","sources":["DT-01-size","DT-01-size-2019","DT-01-size-2023"]},
@@ -74,9 +76,10 @@
     "owner":{"status":"insufficient_evidence","text":"Có nhà nghiên cứu cho rằng thạp có thể thuộc một người giàu hoặc thủ lĩnh dựa trên độ quý và dấu tích mai táng. Đó là suy đoán khảo cổ; chưa xác định được danh tính chủ nhân cụ thể.","sources":["DT-01-funerary-limit"]}
   },
   "dagger": {
+    "overview":{"text":"Đây là mô hình minh họa loại hình dao găm đồng Đông Sơn, chưa gắn với một hiện vật khảo cổ cụ thể. Tư liệu mô tả dao có thể dùng để tự vệ, cắt gọt và đôi khi mang ý nghĩa biểu trưng; kiểu dáng lưỡi và chuôi thay đổi theo từng nhóm.","sources":["DG-DS-01-overview","DG-DS-01-use","DG-DS-01-classification"]},
     "identity":{"text":"Đây là mô hình minh họa Dao găm đồng Đông Sơn. Nó giới thiệu một loại hình hiện vật, chứ chưa gắn với hồ sơ của một mẫu dao khảo cổ cụ thể.","sources":["DG-DS-01-overview"]},
     "material":{"text":"Loại dao găm Đông Sơn mình đang giới thiệu được làm bằng đồng nhé. Đây là thông tin về loại hình lịch sử, không phải phép phân tích vật liệu của mô hình số.","sources":["DG-DS-01-material"]},
-    "composition":{"status":"insufficient_evidence","text":"Mình chưa có kết quả phân tích hợp kim của một mẫu dao riêng cho mô hình này. Vì vậy mình không thể chốt tỷ lệ kim loại hay nói rằng nó là đồng nguyên chất chỉ từ màu trên màn hình.","sources":[]},
+    "composition":{"status":"insufficient_evidence","text":"Đồ đồng Đông Sơn thường dùng hợp kim có đồng, thiếc và chì. Tuy nhiên, mô hình chưa gắn với một mẫu dao cụ thể nên mình chưa có kết quả phân tích để chốt tỷ lệ kim loại hay nói rằng nó là đồng nguyên chất.","sources":["DG-DS-01-alloy-background"]},
     "period":{"status":"insufficient_evidence","text":"Mình chưa có niên đại riêng của mẫu dao này, vì đây là mô hình minh họa chưa gắn với một tiêu bản khảo cổ cụ thể. Mình xác nhận được chủ đề đang giới thiệu là dao găm thuộc văn hóa Đông Sơn.","sources":["DG-DS-01-overview"]},
     "discovery":{"text":"Mô hình này không gắn với một tiêu bản cụ thể, nên chưa có nơi phát hiện riêng. Tư liệu về loại hình dao găm nhắc nhiều địa điểm như Đông Sơn, Thiệu Dương, Việt Khê, Châu Can, Làng Cả và Làng Vạc; không thể chọn một nơi trong đó rồi gán cho mô hình.","sources":["DG-DS-01-sites"]},
     "discoverer":{"status":"insufficient_evidence","text":"Mình chưa xác định mô hình ứng với mẫu khảo cổ nào, nên cũng chưa biết người đã tìm thấy mẫu dao riêng này. Các mẫu dao găm Đông Sơn khác nhau có lịch sử phát hiện khác nhau.","sources":[]},

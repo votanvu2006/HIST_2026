@@ -18,6 +18,7 @@ export type ChatResponse = {
     | "insufficient_evidence"
     | "out_of_scope"
     | "needs_selection"
+    | "needs_clarification"
     | "temporarily_unavailable";
   answer: string;
   citations: Citation[];
@@ -30,6 +31,7 @@ export type ChatRequest = {
   question: string;
   artifact_id: ExhibitId | null;
   session_id: string;
+  history?: { artifact_id: ExhibitId; question: string; answer: string }[];
 };
 
 export async function api<T>(

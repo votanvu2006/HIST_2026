@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ExhibitId } from "../InteractiveScene";
 import { askChat, makeId, visitorSession } from "../lib/api";
-import type { ChatResponse } from "../lib/api";
+import type { ChatRequest, ChatResponse } from "../lib/api";
 import { PushToTalk } from "./PushToTalk";
 import "./chat.css";
 
@@ -9,6 +9,39 @@ type Props = { artifactId: ExhibitId | null; artifactName: string | null; open: 
 type Message = { id: string; role: "user" | "assistant"; text: string; response?: ChatResponse };
 type Key = ExhibitId | "none";
 const initial: Record<Key, Message[]> = { drum: [], jar: [], dagger: [], none: [] };
+const STORAGE_KEY = "heritage-conversations-v2";
+
+function loadConversations(): Record<Key, Message[]> {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? "null");
+    if (!saved || typeof saved !== "object") return initial;
+    return Object.fromEntries(Object.keys(initial).map(key => [key,
+      Array.isArray(saved[key]) ? saved[key].filter((message: Message) =>
+        typeof message?.id === "string" && typeof message?.text === "string" &&
+        (message.role === "user" || message.role === "assistant") &&
+        (!message.response || (message.response.artifact_id === key && Array.isArray(message.response.citations)))
+      ).slice(-40) : [],
+    ])) as Record<Key, Message[]>;
+  } catch { return initial; }
+}
+
+function dialogueHistory(messages: Message[], artifact: ExhibitId): NonNullable<ChatRequest["history"]> {
+  const turns: NonNullable<ChatRequest["history"]> = [];
+  let question: string | null = null;
+  for (const message of messages) {
+    if (message.role === "user") question = message.text;
+    else if (question && message.response?.artifact_id === artifact) {
+      // Transport dialogue, not connection errors or unrelated conversations.
+      if (["answered", "insufficient_evidence", "needs_clarification"].includes(message.response.status)) {
+        turns.push({ artifact_id: artifact, question, answer: message.text });
+      }
+      question = null;
+    }
+  }
+  const recent = turns.slice(-8);
+  while (recent.reduce((size, turn) => size + turn.question.length + turn.answer.length, 0) > 18000) recent.shift();
+  return recent;
+}
 
 export function AnswerSources({ response }: { response: ChatResponse }) {
   if (!response.citations.length) return null;
@@ -22,8 +55,11 @@ export function AnswerSources({ response }: { response: ChatResponse }) {
 }
 
 export function ChatAssistant({ artifactId, artifactName, open, onToggle, embedded = false }: Props) {
-  const [conversations, setConversations] = useState(initial);
+  const [conversations, setConversations] = useState(loadConversations);
   const [session] = useState(visitorSession);
+  useEffect(() => {
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(conversations)); } catch { /* In-memory history still works. */ }
+  }, [conversations]);
   const key: Key = artifactId ?? "none";
   if (embedded) return <div className="phu-chat-embedded"><ChatThread key={key}
     artifactId={artifactId} artifactName={artifactName} onToggle={onToggle} session={session}
@@ -73,7 +109,8 @@ function ChatThread({ artifactId, artifactName, onToggle, session, messages, onA
     pendingQuestion.current = question;
     setDraft(""); setBusy(true); setWaitSeconds(0); setError("");
     try {
-      const response = await askChat({ question, artifact_id: sentId, session_id: session }, controller.signal);
+      const response = await askChat({ question, artifact_id: sentId, session_id: session,
+        history: dialogueHistory(messages, sentId) }, controller.signal);
       if (!controller.signal.aborted) {
         onAppend({ id: makeId(), role: "assistant", text: response.answer, response });
         if (response.status === "temporarily_unavailable") setDraft(question);

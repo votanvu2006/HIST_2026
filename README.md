@@ -64,6 +64,7 @@ HERITAGE_STORAGE=/tmp/heritagexr
 ALLOWED_ORIGINS=https://hist-2026.vercel.app
 
 Đặt GEMINI_API_KEY ở dạng Secret. Không ghi giá trị API key vào README hoặc repository.
+Frontend có rewrite dự phòng cho `/api/*` về backend trước rewrite SPA. Sau khi đổi domain backend, cập nhật cả `VITE_API_BASE_URL` trong Vercel frontend và đích `/api/*` trong `frontend/vercel.json`.
 Cập nhật website
 Production của frontend được triển khai từ nhánh main. Sau khi thay đổi code được merge vào main, Vercel sẽ tự tạo Production Deployment mới.
 
@@ -79,3 +80,5 @@ GET /api/admin/metrics	Xem số liệu chatbot, yêu cầu Bearer token
 
 
 Tài liệu Swagger tại /docs hiện được tắt trên backend deployment.
+
+Hội thoại hướng dẫn viên, cách truyền lịch sử qua các worker serverless và các lệnh kiểm tra được ghi trong [docs/chatbot-dialogue-fix.md](docs/chatbot-dialogue-fix.md). Có thể đặt `GEMINI_FALLBACK_MODEL` để chọn model dự phòng khi model chính gặp lỗi tạm thời; mặc định là `gemini-3.1-flash-lite`.

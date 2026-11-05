@@ -80,7 +80,7 @@ def create_app(settings=None, engine=None):
     @app.middleware("http")
     async def guard_requests(request: Request, call_next):
         if request.method == "POST":
-            limit = MAX_AUDIO + 64*1024 if request.url.path == "/api/transcribe" else 12*1024
+            limit = MAX_AUDIO + 64*1024 if request.url.path == "/api/transcribe" else 64*1024
             length = request.headers.get("content-length")
             if length is None:
                 return JSONResponse({"detail":"Thiếu kích thước yêu cầu."}, status_code=411)
@@ -120,7 +120,7 @@ def create_app(settings=None, engine=None):
         return {"status":"ready" if rag.index.ready and settings.api_key else "setup_required",
                 "service_version":SERVICE_VERSION,
                 "index_ready":rag.index.ready, "api_key_configured":bool(settings.api_key),
-                "model":settings.model, "embedding_model":settings.embedding_model,
+                "model":settings.model, "fallback_model":settings.fallback_model, "embedding_model":settings.embedding_model,
                 "corpus_version":rag.corpus.version, "chunks":len(rag.corpus.chunks),
                 "review_status":rag.corpus.data["review_status"], "artifacts":ARTIFACTS}
 

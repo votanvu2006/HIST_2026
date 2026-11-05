@@ -1,8 +1,14 @@
 {
   "review_status": "source_checked_pending_team_review",
-  "checked_on": "2026-11-03",
+  "checked_on": "2026-11-05",
   "description": "Tóm lược dữ kiện từ bài của Bảo tàng; cần nhóm duyệt trước công bố. Địa danh giữ theo thời điểm bài viết. Không dùng kịch bản AI làm bằng chứng.",
   "sources": [
+    {
+      "id": "museum-dongson-metallurgy",
+      "title": "Vài nét về nghề luyện kim đúc đồng thời Đông Sơn",
+      "published": "2014-05-08",
+      "url": "https://baotanglichsu.vn/vi/Articles/3101/16312/vai-net-ve-nghe-luyen-kim-djuc-djong-thoi-djong-son.html"
+    },
     {
       "id": "museum-ngoclu",
       "title": "Bảo vật quốc gia Việt Nam: Trống đồng Ngọc Lũ",
@@ -65,6 +71,24 @@
     }
   ],
   "chunks": [
+    {
+      "id": "NL-01-alloy-background", "artifact_id": "drum", "source_id": "museum-dongson-metallurgy",
+      "section": "Bối cảnh hợp kim Đông Sơn, không phải phân tích riêng Ngọc Lũ",
+      "source_checked": true, "scope": "type_background", "certainty": "documented", "facts": ["metallurgy_background"],
+      "text": "Đồ đồng Đông Sơn thường dùng hợp kim đồng, thiếc và chì; chì giúp dễ điền đầy các chi tiết khuôn. Thông tin này mô tả kỹ thuật chung, không xác định thành phần hoặc tỷ lệ riêng của hiện vật đang xem."
+    },
+    {
+      "id": "DT-01-alloy-background", "artifact_id": "jar", "source_id": "museum-dongson-metallurgy",
+      "section": "Bối cảnh hợp kim Đông Sơn, không phải phân tích riêng Đào Thịnh",
+      "source_checked": true, "scope": "type_background", "certainty": "documented", "facts": ["metallurgy_background"],
+      "text": "Đồ đồng Đông Sơn thường dùng hợp kim đồng, thiếc và chì; chì giúp dễ điền đầy các chi tiết khuôn. Thông tin này mô tả kỹ thuật chung, không xác định thành phần hoặc tỷ lệ riêng của hiện vật đang xem."
+    },
+    {
+      "id": "DG-DS-01-alloy-background", "artifact_id": "dagger", "source_id": "museum-dongson-metallurgy",
+      "section": "Bối cảnh hợp kim Đông Sơn, không phải phân tích một mẫu dao",
+      "source_checked": true, "scope": "type_background", "certainty": "documented", "facts": ["metallurgy_background"],
+      "text": "Đồ đồng Đông Sơn thường dùng hợp kim đồng, thiếc và chì; chì giúp dễ điền đầy các chi tiết khuôn. Thông tin này mô tả kỹ thuật chung, không xác định thành phần hoặc tỷ lệ riêng của hiện vật đang xem."
+    },
     {
       "id": "NL-01-period",
       "artifact_id": "drum",

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ExhibitId } from "../InteractiveScene";
 import { api, makeId } from "../lib/api";
-import type { ChatResponse } from "../lib/api";
+import type { ChatRequest, ChatResponse } from "../lib/api";
 import { AnswerSources } from "./ChatAssistant";
 import "./sandbox.css";
 
@@ -29,6 +29,7 @@ export default function RagSandbox() {
   const [busy, setBusy] = useState(false);
   const [session] = useState(() => `sandbox-${makeId()}`);
   const request = useRef<AbortController | null>(null);
+  const dialogues = useRef<Record<ExhibitId, NonNullable<ChatRequest["history"]>>>({ drum: [], jar: [], dagger: [] });
   const headers = { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
 
   useEffect(() => {
@@ -51,8 +52,15 @@ export default function RagSandbox() {
     setBusy(true); setError(""); setResult(null);
     try {
       const value = await api<Result>("/api/admin/chat", { method: "POST", headers,
-        body: JSON.stringify({ question, artifact_id: artifact, session_id: session }), signal: controller.signal });
-      if (!controller.signal.aborted) setResult(value);
+        body: JSON.stringify({ question, artifact_id: artifact, session_id: session, history: dialogues.current[artifact] }), signal: controller.signal });
+      if (!controller.signal.aborted) {
+        setResult(value);
+        if (["answered", "insufficient_evidence", "needs_clarification"].includes(value.response.status)) {
+          const recent = [...dialogues.current[artifact], { artifact_id: artifact, question, answer: value.response.answer }].slice(-8);
+          while (recent.reduce((size, turn) => size + turn.question.length + turn.answer.length, 0) > 18000) recent.shift();
+          dialogues.current[artifact] = recent;
+        }
+      }
     } catch (cause) {
       if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : "Chưa nhận được kết quả.");
     } finally { if (!controller.signal.aborted) setBusy(false); }
